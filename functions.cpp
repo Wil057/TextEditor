@@ -1,30 +1,17 @@
-//¶ÁÈ¡textÎÄ¼ş´¢´æµ½inputÖĞ 
-void ReadLines(FILE *fp)
-{   
-	char Test[80] = {0};
-	char TextString[1600]={0}; 
-	while(!feof(fp))  
-	{          
-		memset(Test,0, sizeof(Test));                 
-		fgets(Test,sizeof(Test) - 1, fp); // °üº¬ÁË»»ĞĞ·û              
-		strcat(TextString,Test);	//½«ËùÓĞ×Ö·û´¢´æµ½TextStringÒ»Î¬Êı×éÖĞ 
-	} 
-	TransTwo(TextString);
-}
+//Ò»¡¢¹¦ÄÜĞÔº¯Êı
 
+ 
 
- //Í³¼ÆÓĞÄÚÈİµÄĞĞÊı£¬°üº¬ÔÚÖĞ¼äÖ»ÓĞ\0µÄĞĞ£¨¿ÕĞĞ£© 
+//Í³¼ÆÓĞÄÚÈİµÄĞĞÊı£¬°üº¬ÔÚÖĞ¼äÖ»ÓĞ\0µÄĞĞ£¨¿ÕĞĞ£© 
 int CountLines(char StringArray[][80])
 {
 	int n=0;   
-	do
+	while(strlen(StringArray[19-n]==0))
 	{
 		n++;
-	}while(strlen(StringArray[n-1]!=0));
-	return n;
+	}
+	return 20-n;
 } 
-
-
 
 //½«StringLine×ª±äÎª¶şÎ¬Êı×é´æµ½inputÖĞ 
 int TransTwo(char *StringLine )
@@ -59,7 +46,7 @@ int TransTwo(char *StringLine )
 //ÔÚReadLinesºóĞèÒªfclose 
 
 
- //½«¶şÎ¬Êı×éinput±äÎªÒ»Î¬Êı×éStringLine 
+ //½«¶şÎ¬Êı×éinput±äÎªÒ»Î¬Êı×é´¢´æµ½StringLine 
 void TransOne(char *StringLine) 
 {
 	int n=0;
@@ -76,6 +63,38 @@ void TransOne(char *StringLine)
 }
 
 
+
+//ÎÄ¼ş´¦Àíº¯Êı 
+
+
+//¶ÁÈ¡textÎÄ¼ş´¢´æµ½inputÖĞ 
+void ReadLines(FILE *fp)
+{   
+	char Test[80] = {0};
+	char TextString[1600]={0}; 
+	while(!feof(fp))  
+	{          
+		memset(Test,0, sizeof(Test));                 
+		fgets(Test,sizeof(Test) - 1, fp); // °üº¬ÁË»»ĞĞ·û              
+		strcat(TextString,Test);	//½«ËùÓĞ×Ö·û´¢´æµ½TextStringÒ»Î¬Êı×éÖĞ 
+	} 
+	TransTwo(TextString);
+}
+
+//½«input±£´æµ½fpÎÄ¼şÖĞ 
+void TextSave(FILE *fp)
+{
+	char TextString[1600]=0;
+	TransOne(TextString);
+	fprintf(fp,"%s",TextString);
+} 
+
+
+
+
+//ÎÄ±¾±à¼­º¯Êı 
+
+
 //É¾³ıÑ¡ÖĞÇøÓò 
 void SelectedZoneDelet(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×óÉÏ½Ç£¬2ÎªÓÒÏÂ½Ç 
 {
@@ -89,18 +108,26 @@ void SelectedZoneDelet(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×
 	{
 		if(strlen(input[y1])<79)
 			f=1; 
-		strcpy(input[y1]+x1,input[y1]+x2+1)
+		strcpy(input[y1]+x1,input[y1]+x2+1)//¸Ä±äy1 
 		
-		
-		for(int i=0;i<y1;i++)
+		for(int i=0;i<y1;i++)//´¦Àí0~y1-1ĞĞ 
 		{
 			strcat(StringLine,input[i]);
 			if(strlen(input[i])<79)
 				StringLine[strlen(StringLine)]='\n';
 		}
-		strcat(StringLine,input[i]);
+		
+		strcat(StringLine,input[i]);//´¦Àíy1ĞĞ
 		if(f)
 			StringLine[strlen(StringLine)]='\n';
+			
+		for(int i=y1+1;i<n-1;i++)	//´¦Àíy1~nĞĞ 
+		{
+			strcat(StringLine,input[i]);
+			if(strlen(input[i])<79)
+				StringLine[strlen(StringLine)]='\n';
+		} 
+		strcat(StringLine,input[i]);
 	}
 	else
 	{
@@ -108,8 +135,7 @@ void SelectedZoneDelet(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×
 			f=1;
 			
 		input[y1][x1]='\0';	//¸Ä±äy1 
-		input[y2]=input[y2]+x2+1; //¸Ä±äy2 
-		
+		strcpy(input[y2],input[y2]+x2+1); //¸Ä±äy2 
 		
 		for(i=0;i<y1;i++)  //´¦Àí0~y1-1ĞĞ 
 		{
@@ -118,8 +144,12 @@ void SelectedZoneDelet(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×
 				StringLine[strlen(StringLine)]='\n';
 		}
 		strcat(StringLine,input[i]); //´¦Àíy1ĞĞ
-		 
-		for(i=y2;i<n;i++) //´¦Àíy2~nĞĞ 
+		i=y2;
+		strcat(StringLine,input[i]);//´¦Àíy2ĞĞ
+		if(f)
+			StringLine[strlen(StringLine)]='\n';
+			
+		for(i=y2+1;i<n-1;i++) //´¦Àíy2~nĞĞ 
 		{
 			strcat(StringLine,input[i]);
 			if(strlen(input[i])<79)
@@ -127,35 +157,10 @@ void SelectedZoneDelet(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×
 		}
 		strcat(StringLine,input[i]);
 	}
-	 	/*int n=CountLines(input);
-	int a[n]=0;
-	char StringLine[1600]=0;
-	//ÅĞ¶ÏÊÇ·ñÓĞ»»ĞĞ·û 
-	for(int i=0;i<n;i++)
-	{
-		if(strlen(input[i])<79)
-			a[i]=1;
-	}
-	
-	//É¾È¥×Ö·û 
-	for(int i=y1;i<y2-1;i++)
-	{
-		strcpy(input[i]+x1,input[i]+x2+1);
-	} 
-	
-	//Ä©Î²²¹³ä»»ĞĞ·û ²¢×ªÎªÒ»Î¬char 
-	for(int i=0;i<n-1;i++)
-	{
-		strcat(StringLine,input[i]);
-		if(a[i]=1)
-			StringLine[strlen(StringLine)]='\n';
-	}
-	strcat(StringLine,input[i]);
-	TransTwo(StringLine)
-	*/
+
 } 
 
-
+//¸´ÖÆÑ¡ÖĞÇøÓò 
 void Copy(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×óÉÏ½Ç£¬2ÎªÓÒÏÂ½Ç 
 {
 
@@ -182,12 +187,114 @@ void Copy(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×óÉÏ½Ç£¬2ÎªÓÒÏ
 	
 }
 
-
+//¼ôÇĞ¡ª¡ªÏÈ¸´ÖÆÑ¡ÖĞÇøÓò£¬ºóÉ¾³ıÑ¡ÖĞÇøÓò 
 int Cut(int x1,int y1,int x2,int y2) //xÎªÁĞÏÂ±ê£¬yÎªĞĞÏÂ±ê ,1Îª×óÉÏ½Ç£¬2ÎªÓÒÏÂ½Ç 
 {
 	char TextString[1600]=0;
 	Copy(x1,y1,x2,y2); 
 	SelectedZoneDelet(x1,y1,x2,y2); 
+}
+
+//Õ³Ìù
+void  Paste(int x,int y)
+{
+	char StringLine[1600]=0;
+	char StringTmp[1600]=0; 
+	int count=0;
+	//ÊıÔÚx£¬yÊÇµÚ¼¸¸ö×Ö·û£¬°üÀ¨\n 
+	for(int i=0;i<x;i++)
+	{
+		for(int j=0;j<79;j++)
+		{
+			count++;
+			if(input[i][j]=='\0')
+				break;
+		}
+	}
+	count=count+y;//x,y×ªÎªÒ»Î¬ºóµÄÏÂ±ê
+	//ÓÃreplaementÌæ´úsearch 
+	TransOne(StringLine);
+	strcpy(StringTmp,StringLine+count);
+	strcpy(StringLine+count,tmp);
+	strcat(StringLine,StringTmp);
+	
+	TransTwo(StringLine);
+
+} 
+ 
+
+
+//²éÕÒÖ¸¶¨ÄÚÈİ 
+void Search(char *Text,int *Pxy)   //Êı×éÆæÊıÏîÎªx×ø±ê£¬¼´ÁĞÊı£¬Å¼ÊıÏîÎªy×ø±ê£¬¼´Å¼Êı 
+{
+	int i=0,j=0;
+	int m;
+	int c=0;
+	int n=CountLines();
+	int p,q=0;
+	while(i<n)
+	{
+		if(input[i][j]==*Text)
+		{
+			p=i;
+			q=j;
+			for(m=1;m<strlen(Text);m++)
+			{
+				q++;
+				if(q==79)
+				{
+					p++;
+					q=0;
+				} 
+				else if(input[p][q]=='\0')
+					break;
+					
+				if(input[p][q]!=*(Text+m))
+					break;
+			}
+			if(m==strlen(Text))
+			{
+				Pxy[2*c]=i;
+				Pxy[2*c+1]=j;	
+				c++;
+			}
+				
+		}
+		j++;
+		if(input[i][j]=='\0')
+		{
+			i++;
+			j=0;
+		}
+		
+	}
+} 
+
+//Ìæ»»Ö¸¶¨ÄÚÈİ
+void Replace(int x,int y,char *search,char *replacement) 
+{
+	char StringLine[1600]=0;
+	char StringTmp[1600]=0; 
+	int count=0;
+	//ÊıÔÚx£¬yÊÇµÚ¼¸¸ö×Ö·û£¬°üÀ¨\n 
+	for(int i=0;i<x;i++)
+	{
+		for(int j=0;j<79;j++)
+		{
+			count++;
+			if(input[i][j]=='\0')
+				break;
+		}
+	}
+	count=count+y;//x,y×ªÎªÒ»Î¬ºóµÄÏÂ±ê
+	//ÓÃreplaementÌæ´úsearch 
+	TransOne(StringLine);
+	strcpy(StringTmp,StringLine+count+strlen(search));
+	strcpy(StringLine+count,replacement);
+	strcat(StringLine,StringTmp);
+	
+	TransTwo(StringLine);
+	 
 }
 
 
